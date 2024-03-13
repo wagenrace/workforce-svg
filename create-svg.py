@@ -6,14 +6,14 @@ from cairosvg import svg2png
 
 class SvgGenerator:
     def __init__(self) -> None:
-        pass
         base_model_name = "codellama"
         ollama.pull(base_model_name)
 
         modelfile = f"""
-        FROM {base_model_name}
-        SYSTEM You create an SVG of the input. You only return the SVG.
+FROM {base_model_name}
+SYSTEM You create an SVG of the input. You only return the SVG.
         """
+        print(modelfile)
         self.svg_model_name = "svg_maker"
         ollama.create(model=self.svg_model_name, modelfile=modelfile)
 
@@ -37,4 +37,4 @@ class SvgGenerator:
 
 if __name__ == "__main__":
     svg_generator = SvgGenerator()
-    svg_generator.generate("panda", "panda.png")
+    svg_generator.generate("gear", "output.png")
