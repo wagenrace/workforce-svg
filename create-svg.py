@@ -1,7 +1,7 @@
 import re
 
 import ollama
-from cairosvg import svg2png
+import cairosvg
 
 
 class SvgGenerator:
@@ -11,7 +11,7 @@ class SvgGenerator:
 
         modelfile = f"""
 FROM {base_model_name}
-SYSTEM You create an SVG of the input. You only return the SVG.
+SYSTEM You create an SVG of the input. The width and height of the SVG should be 512x512. You only return the SVG. The SVG should be valid and not contain any malicious code.
         """
         print(modelfile)
         self.svg_model_name = "svg_maker"
@@ -23,16 +23,19 @@ SYSTEM You create an SVG of the input. You only return the SVG.
             messages=[{"role": "user", "content": input_message}],
         )
 
-        print(result)
+        print(result["message"]["content"])
 
         # Example text with SVG elements
         text = result["message"]["content"].replace("\n", "")
-        text = '<div><p>Hello, world!</p><svg width="100" height="100"><rect x="10" y="10" width="80" height="80" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)"/></svg></div>'
 
         # Find all SVG elements in the text
         svg_code = re.findall(r"<svg.*?</svg>", text)[0]
+        # Convert SVG code to PNG image
+        png_data = cairosvg.svg2png(bytestring=svg_code)
 
-        svg2png(bytestring=svg_code, write_to=output_name)
+        # Save the PNG image to a file
+        with open(output_name, "wb") as f:
+            f.write(png_data)
 
 
 if __name__ == "__main__":
