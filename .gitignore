@@ -1,2 +1,4 @@
-/index.html
-/output.png
+*.pyc
+__pycache__/
+
+/output
