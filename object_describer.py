@@ -8,7 +8,7 @@ class ObjectDescriber:
 
         modelfile = f"""
 FROM {base_model_name}
-SYSTEM What shapes, path, or colors can I add to the image to make it look more like the target object? Only work with the image and the target object. Only return the feedback.
+SYSTEM How can we modify the design of the image to make it resemble the input? Give your result as a list of commands.
         """
         print(modelfile)
         self.model_name = "object_describer"
